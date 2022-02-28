@@ -181,7 +181,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = parcellate_data(sub_data[i], atlas_2_data, 45)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session[sub][i]+'_2mm_norm_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session[sub][i]+'_2mm_norm_p.npy', p)
     sub_p_data[sub] = sub_p_ls
 
     # 4mm
@@ -190,7 +190,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = parcellate_data(sub_data[i], atlas_4_data, 25)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session_4[sub][i]+'_4mm_norm_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session_4[sub][i]+'_4mm_norm_p.npy', p)
     sub_p_data_4[sub] = sub_p_ls
 
 # # check the shape of the data
@@ -256,7 +256,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = parcellate_data(sub_data[i], atlas_2_data, 45)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session[sub][i]+'_2mm_tf_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session[sub][i]+'_2mm_tf_p.npy', p)
     sub_p_data[sub] = sub_p_ls
 
     # 4mm
@@ -265,7 +265,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = parcellate_data(sub_data[i], atlas_4_data, 25)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session_4[sub][i]+'_4mm_tf_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+tf_session_4[sub][i]+'_4mm_tf_p.npy', p)
     sub_p_data_4[sub] = sub_p_ls
 
 # # check the shape of the data

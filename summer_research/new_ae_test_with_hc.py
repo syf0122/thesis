@@ -114,19 +114,18 @@ def mse_by_region(input, recon):
 '''
     Load Trained Models
 '''
-autoencoder_360_2 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/autoencoder_2mm_0.74_360.hdf5', compile=False)
-encoder_360_2 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/encoder_2mm_0.74_360.hdf5', compile=False)
-decoder_360_2 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/decoder_2mm_0.74_360.hdf5', compile=False)
+autoencoder_360_2 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/autoencoder_360_2mm.hdf5', compile=False)
+encoder_360_2 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/encoder_360_2mm.hdf5', compile=False)
+decoder_360_2 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/decoder_360_2mm.hdf5', compile=False)
 
-autoencoder_360_4 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/autoencoder_4mm_0.08_360.hdf5', compile=False)
-encoder_360_4 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/encoder_4mm_0.08_360.hdf5', compile=False)
-decoder_360_4 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/decoder_4mm_0.08_360.hdf5', compile=False)
+autoencoder_360_4 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/autoencoder_360_4mm.hdf5', compile=False)
+encoder_360_4 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/encoder_360_4mm.hdf5', compile=False)
+decoder_360_4 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/decoder_360_4mm.hdf5', compile=False)
 
-autoencoder_379 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/autoencoder_surf_0.33_379.hdf5', compile=False)
-encoder_379 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/encoder_surf_0.33_379.hdf5', compile=False)
-decoder_379 = load_model('/data_qnap/yifeis/NAS/gan/with_param/selected/decoder_surf_0.33_379.hdf5', compile=False)
+autoencoder_379 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/autoencoder_379_surf.hdf5', compile=False)
+encoder_379 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/encoder_379_surf.hdf5', compile=False)
+decoder_379 = load_model('/data_qnap/yifeis/NAS/ae_updated/model_hcp_hc/decoder_379_surf.hdf5', compile=False)
 print("Loading Successful!")
-
 
 if len(sys.argv) == 2:
     print("Test on OAS data")
@@ -215,10 +214,10 @@ if len(sys.argv) == 2:
             run = test_ses_re[i]
             # save reconstructed data
             mtx_recon_df = pd.DataFrame(data=test_re[i]) # (149, 360)
-            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/recon/"+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+"_recon_df.csv")
+            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/recon/"+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+"_recon_df.csv")
             # save latent data
             mtx_latent_df = pd.DataFrame(data=test_latent_re[i]) # (149, 45)
-            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/latent/"+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+"_latent_df.csv")
+            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/latent/"+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+"_latent_df.csv")
 
         # volume 4mm
         test_re = test_recon_data_360_4mm[sub]           # reconstructed data for sub
@@ -229,10 +228,10 @@ if len(sys.argv) == 2:
             run = test_ses_re[i]
             # save reconstructed data
             mtx_recon_df = pd.DataFrame(data=test_re[i]) # (149, 360)
-            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/recon/"+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+"_recon_df.csv")
+            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/recon/"+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+"_recon_df.csv")
             # save latent data
             mtx_latent_df = pd.DataFrame(data=test_latent_re[i]) # (149, 45)
-            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/latent/"+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+"_latent_df.csv")
+            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/latent/"+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+"_latent_df.csv")
 
         # surface
         test_re = test_recon_data_379[sub]           # reconstructed data for sub
@@ -243,10 +242,10 @@ if len(sys.argv) == 2:
             run = test_ses_re[i]
             # save reconstructed data
             mtx_recon_df = pd.DataFrame(data=test_re[i])  # (149, 379)
-            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/recon/"+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+"_recon_df.csv")
+            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/recon/"+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+"_recon_df.csv")
             # save latent data
             mtx_latent_df = pd.DataFrame(data=test_latent_re[i]) # (149, 40)
-            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/latent/"+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+"_latent_df.csv")
+            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/latent/"+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+"_latent_df.csv")
 
     print('saved test results!')
 
@@ -266,21 +265,21 @@ if len(sys.argv) == 2:
         cols = list(hcp.mmp.labels.values())[1:361] # 360
         rows = test_sessions_360_2mm[sub]
         mse_data_sub = pd.DataFrame(data=mse_data_sub, index=rows, columns=cols) # (2, 360)
-        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/MSE/"+group+"_"+str(sub)+"_2mm_"+prepro+"_regional_MSE.csv")
+        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/MSE/"+group+"_"+str(sub)+"_2mm_"+prepro+"_regional_MSE.csv")
 
         # 4mm
         mse_data_sub = mse_region_360_4[sub]
         cols = list(hcp.mmp.labels.values())[1:361] # 360
         rows = test_sessions_360_4mm[sub]
         mse_data_sub = pd.DataFrame(data=mse_data_sub, index=rows, columns=cols) # (2, 360)
-        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/MSE/"+group+"_"+str(sub)+"_4mm_"+prepro+"_regional_MSE.csv")
+        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/MSE/"+group+"_"+str(sub)+"_4mm_"+prepro+"_regional_MSE.csv")
 
         # surface
         mse_data_sub = mse_region_379[sub]
         cols = list(hcp.mmp.labels.values())[1:] # 379
         rows = test_sessions_379[sub]
         mse_data_sub = pd.DataFrame(data=mse_data_sub, index=rows, columns=cols) # (2, 379)
-        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/MSE/"+group+"_"+str(sub)+"_surf_"+prepro+"_regional_MSE.csv")
+        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/MSE/"+group+"_"+str(sub)+"_surf_"+prepro+"_regional_MSE.csv")
 
 
     '''
@@ -299,7 +298,7 @@ if len(sys.argv) == 2:
             pad = np.ones(19) - 2
             mse = np.concatenate((mse, pad))
             # save image of mse
-            # nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/gan/with_param/results/plots/'+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+'_mse.html')
+            nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/plots/'+group+"_"+str(sub)+"_"+run+"_2mm_"+prepro+'_mse.html')
 
         # volume MSE 4mm
         mse_sub = mse_region_360_4[sub]       # regional mse data of sub
@@ -311,7 +310,7 @@ if len(sys.argv) == 2:
             pad = np.ones(19) - 2
             mse = np.concatenate((mse, pad))
             # save image of mse
-            # nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/gan/with_param/results/plots/'+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+'_mse.html')
+            nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/plots/'+group+"_"+str(sub)+"_"+run+"_4mm_"+prepro+'_mse.html')
 
         # surface
         mse_sub = mse_region_379[sub]       # regional mse data of sub
@@ -320,7 +319,7 @@ if len(sys.argv) == 2:
             mse = mse_sub[i]
             run = test_ses[i]
             # save image of mse
-            # nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/gan/with_param/results/plots/'+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+'_mse.html')
+            nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/plots/'+group+"_"+str(sub)+"_"+run+"_surf_"+prepro+'_mse.html')
 else:
     print("Test on HCP data")
     # test on the HCP subjects
@@ -381,10 +380,10 @@ else:
             run = test_ses_re[i]
             # save reconstructed data
             mtx_recon_df = pd.DataFrame(data=test_re[i]) # (900, 360)
-            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/recon/HCP_"+str(sub)+"_"+run+"_360_recon_df.csv")
+            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/recon/HCP_"+str(sub)+"_"+run+"_360_recon_df.csv")
             # save latent data
             mtx_latent_df = pd.DataFrame(data=test_latent_re[i]) # (900, 45)
-            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/latent/HCP_"+str(sub)+"_"+run+"_360_latent_df.csv")
+            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/latent/HCP_"+str(sub)+"_"+run+"_360_latent_df.csv")
 
         # 379
         test_re = test_recon_data_379[sub]           # reconstructed data for sub
@@ -395,10 +394,10 @@ else:
             run = test_ses_re[i]
             # save reconstructed data
             mtx_recon_df = pd.DataFrame(data=test_re[i])  # (900, 379)
-            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/recon/HCP_"+str(sub)+"_"+run+"_379_recon_df.csv")
+            mtx_recon_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/recon/HCP_"+str(sub)+"_"+run+"_379_recon_df.csv")
             # save latent data
             mtx_latent_df = pd.DataFrame(data=test_latent_re[i]) # (900, 40)
-            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/latent/HCP_"+str(sub)+"_"+run+"_379_latent_df.csv")
+            mtx_latent_df.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/latent/HCP_"+str(sub)+"_"+run+"_379_latent_df.csv")
 
     print('saved test results!')
 
@@ -416,14 +415,14 @@ else:
         cols = list(hcp.mmp.labels.values())[1:361] # 360
         rows = hcp_session[sub]
         mse_data_sub = pd.DataFrame(data=mse_data_sub, index=rows, columns=cols) # (2, 360)
-        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/MSE/HCP_"+str(sub)+"_360_regional_MSE.csv")
+        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/MSE/HCP_"+str(sub)+"_360_regional_MSE.csv")
 
         # 379
         mse_data_sub = mse_region_379[sub]
         cols = list(hcp.mmp.labels.values())[1:] # 379
         rows = hcp_session[sub]
         mse_data_sub = pd.DataFrame(data=mse_data_sub, index=rows, columns=cols) # (2, 379)
-        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/gan/with_param/results/MSE/HCP_"+str(sub)+"_379_regional_MSE.csv")
+        mse_data_sub.to_csv("/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/MSE/HCP_"+str(sub)+"_379_regional_MSE.csv")
 
     '''
         Save plots
@@ -441,7 +440,7 @@ else:
             pad = np.ones(19) - 2
             mse = np.concatenate((mse, pad))
             # save image of mse
-            # nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/gan/with_param/results/plots/HCP_'+str(sub)+"_"+run+'_360_mse.html')
+            nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/plots/HCP_'+str(sub)+"_"+run+'_360_mse.html')
 
         # 379
         mse_sub = mse_region_379[sub]       # regional mse data of sub
@@ -450,4 +449,4 @@ else:
             mse = mse_sub[i]
             run = test_ses[i]
             # save image of mse
-            # nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/gan/with_param/results/plots/HCP_'+str(sub)+"_"+run+'_379_mse.html')
+            nlp.view_surf(hcp.mesh.inflated,hcp.cortex_data(hcp.unparcellate(mse, hcp.mmp)), bg_map=hcp.mesh.sulc, symmetric_cmap = False, vmax = 0.01, vmin = 0).save_as_html('/data_qnap/yifeis/NAS/ae_updated/results/hcp_hc/plots/HCP_'+str(sub)+"_"+run+'_379_mse.html')

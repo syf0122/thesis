@@ -17,6 +17,7 @@ import tensorflow as tf
 from tensorflow.keras import losses, callbacks
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
+from tensorflow.keras.models import load_model
 import tensorflow_docs as tfdocs
 import tensorflow_docs.modeling
 import tensorflow_docs.plots
@@ -61,23 +62,61 @@ def load_data(subjects, ls):
         mtx13_p = np.load('/data_qnap/yifeis/new/processed/'+str(subject)+'/retcw_p.npy')
         mtx14_p = np.load('/data_qnap/yifeis/new/processed/'+str(subject)+'/retexp_p.npy')
 
-        mtx1_p = (mtx1_p - mtx1_p.min()) / (mtx1_p.max() - mtx1_p.min())
-        mtx2_p = (mtx2_p - mtx2_p.min()) / (mtx2_p.max() - mtx2_p.min())
-        mtx3_p = (mtx3_p - mtx3_p.min()) / (mtx3_p.max() - mtx3_p.min())
-        mtx4_p = (mtx4_p - mtx4_p.min()) / (mtx4_p.max() - mtx4_p.min())
+        mtx1_p = mtx1_p.T
+        mtx1_p = (mtx1_p - np.mean(mtx1_p,axis=0))/np.std(mtx1_p,axis=0)
+        mtx1_p = mtx1_p.T
 
-        mtx5_p = (mtx5_p - mtx5_p.min()) / (mtx5_p.max() - mtx5_p.min())
-        mtx6_p = (mtx6_p - mtx6_p.min()) / (mtx6_p.max() - mtx6_p.min())
-        mtx7_p = (mtx7_p - mtx7_p.min()) / (mtx7_p.max() - mtx7_p.min())
-        mtx8_p = (mtx8_p - mtx8_p.min()) / (mtx8_p.max() - mtx8_p.min())
+        mtx2_p = mtx2_p.T
+        mtx2_p = (mtx2_p - np.mean(mtx2_p,axis=0))/np.std(mtx2_p,axis=0)
+        mtx2_p = mtx2_p.T
 
-        mtx9_p = (mtx9_p - mtx9_p.min()) / (mtx9_p.max() - mtx9_p.min())
-        mtx10_p = (mtx10_p - mtx10_p.min()) / (mtx10_p.max() - mtx10_p.min())
-        mtx11_p = (mtx11_p - mtx11_p.min()) / (mtx11_p.max() - mtx11_p.min())
-        mtx12_p = (mtx12_p - mtx12_p.min()) / (mtx12_p.max() - mtx12_p.min())
-        mtx13_p = (mtx13_p - mtx13_p.min()) / (mtx13_p.max() - mtx13_p.min())
-        mtx14_p = (mtx14_p - mtx14_p.min()) / (mtx14_p.max() - mtx14_p.min())
+        mtx3_p = mtx3_p.T
+        mtx3_p = (mtx3_p - np.mean(mtx3_p,axis=0))/np.std(mtx3_p,axis=0)
+        mtx3_p = mtx3_p.T
 
+        mtx4_p = mtx4_p.T
+        mtx4_p = (mtx4_p - np.mean(mtx4_p,axis=0))/np.std(mtx4_p,axis=0)
+        mtx4_p = mtx4_p.T
+
+        mtx5_p = mtx5_p.T
+        mtx5_p = (mtx5_p - np.mean(mtx5_p,axis=0))/np.std(mtx5_p,axis=0)
+        mtx5_p = mtx5_p.T
+
+        mtx6_p = mtx6_p.T
+        mtx6_p = (mtx6_p - np.mean(mtx6_p,axis=0))/np.std(mtx6_p,axis=0)
+        mtx6_p = mtx6_p.T
+
+        mtx7_p = mtx7_p.T
+        mtx7_p = (mtx7_p - np.mean(mtx7_p,axis=0))/np.std(mtx7_p,axis=0)
+        mtx7_p = mtx7_p.T
+
+        mtx8_p = mtx8_p.T
+        mtx8_p = (mtx8_p - np.mean(mtx8_p,axis=0))/np.std(mtx8_p,axis=0)
+        mtx8_p = mtx8_p.T
+
+        mtx9_p = mtx9_p.T
+        mtx9_p = (mtx9_p - np.mean(mtx9_p,axis=0))/np.std(mtx9_p,axis=0)
+        mtx9_p = mtx9_p.T
+
+        mtx10_p = mtx10_p.T
+        mtx10_p = (mtx10_p - np.mean(mtx10_p,axis=0))/np.std(mtx10_p,axis=0)
+        mtx10_p = mtx10_p.T
+
+        mtx11_p = mtx11_p.T
+        mtx11_p = (mtx11_p - np.mean(mtx11_p,axis=0))/np.std(mtx11_p,axis=0)
+        mtx11_p = mtx11_p.T
+
+        mtx12_p = mtx12_p.T
+        mtx12_p = (mtx12_p - np.mean(mtx12_p,axis=0))/np.std(mtx12_p,axis=0)
+        mtx12_p = mtx12_p.T
+
+        mtx13_p = mtx13_p.T
+        mtx13_p = (mtx13_p - np.mean(mtx13_p,axis=0))/np.std(mtx13_p,axis=0)
+        mtx13_p = mtx13_p.T
+
+        mtx14_p = mtx14_p.T
+        mtx14_p = (mtx14_p - np.mean(mtx14_p,axis=0))/np.std(mtx14_p,axis=0)
+        mtx14_p = mtx14_p.T
         ls.append(mtx1_p)
         ls.append(mtx2_p)
         ls.append(mtx3_p)
@@ -99,10 +138,22 @@ def load_train_data(subjects, ls):
         mtx2_p = np.load('/data_qnap/yifeis/new/processed/'+str(subject)+'/rest2_p.npy')
         mtx3_p = np.load('/data_qnap/yifeis/new/processed/'+str(subject)+'/rest3_p.npy')
         mtx4_p = np.load('/data_qnap/yifeis/new/processed/'+str(subject)+'/rest4_p.npy')
-        mtx1_p = (mtx1_p - mtx1_p.min()) / (mtx1_p.max() - mtx1_p.min())
-        mtx2_p = (mtx2_p - mtx2_p.min()) / (mtx2_p.max() - mtx2_p.min())
-        mtx3_p = (mtx3_p - mtx3_p.min()) / (mtx3_p.max() - mtx3_p.min())
-        mtx4_p = (mtx4_p - mtx4_p.min()) / (mtx4_p.max() - mtx4_p.min())
+        mtx1_p = mtx1_p.T
+        mtx1_p = (mtx1_p - np.mean(mtx1_p,axis=0))/np.std(mtx1_p,axis=0)
+        mtx1_p = mtx1_p.T
+
+        mtx2_p = mtx2_p.T
+        mtx2_p = (mtx2_p - np.mean(mtx2_p,axis=0))/np.std(mtx2_p,axis=0)
+        mtx2_p = mtx2_p.T
+
+        mtx3_p = mtx3_p.T
+        mtx3_p = (mtx3_p - np.mean(mtx3_p,axis=0))/np.std(mtx3_p,axis=0)
+        mtx3_p = mtx3_p.T
+
+        mtx4_p = mtx4_p.T
+        mtx4_p = (mtx4_p - np.mean(mtx4_p,axis=0))/np.std(mtx4_p,axis=0)
+        mtx4_p = mtx4_p.T
+
         ls.append(mtx1_p)
         ls.append(mtx2_p)
         ls.append(mtx3_p)
@@ -136,7 +187,7 @@ def mse_by_region(input, output):
     return mse_all
 
 # ------ Autoencoder ------ #
-def train(train_data, epo, name):
+def train(train_data, epo, name, run):
 
     train_sub = []
     for n in range(len(train_subjects)):
@@ -144,14 +195,14 @@ def train(train_data, epo, name):
 
     # encoder
     input_data = Input(shape=(379,))
-    encoder1 = Dense(160, activation='sigmoid')(input_data)
-    encoder2 = Dense(80, activation='sigmoid')(encoder1)
-    encoder3 = Dense(40, activation='sigmoid')(encoder2)
+    encoder1 = Dense(160, activation='relu')(input_data)
+    encoder2 = Dense(80, activation='relu')(encoder1)
+    encoder3 = Dense(40, activation='relu')(encoder2)
 
     # decoder
-    decoder1 = Dense(80, activation='sigmoid')(encoder3)
-    decoder2 = Dense(160, activation='sigmoid')(decoder1)
-    decoder3 = Dense(379, activation='sigmoid')(decoder2)
+    decoder1 = Dense(80, activation='relu')(encoder3)
+    decoder2 = Dense(160, activation='relu')(decoder1)
+    decoder3 = Dense(379)(decoder2)
 
     # train
     hist_ls = []
@@ -163,6 +214,7 @@ def train(train_data, epo, name):
         sub = train_sub[sub_i]
         print("First round: training with subject " + str(train_subjects[sub_i]))
         for tr in sub: # train the model with each matrix from this subject for epo epochs
+            print(tr.shape)
             h = autoencoder.fit(tr, tr, epochs=epo, batch_size=32, shuffle=True)
             hist_ls.append(h)
 
@@ -193,6 +245,13 @@ def train(train_data, epo, name):
     decoder_layer2 = autoencoder.layers[-2]
     decoder_layer3 = autoencoder.layers[-1]
     decoder = Model(inputs=encoded_input, outputs=decoder_layer3(decoder_layer2(decoder_layer1(encoded_input))))
+
+    ## save the model
+    # saving whole model
+    autoencoder.save('/data_qnap/yifeis/ae_model/autoencoder_model_'+str(run)+'.hdf5')
+    encoder.save('/data_qnap/yifeis/ae_model/encoder_model_'+str(run)+'.hdf5')
+    decoder.save('/data_qnap/yifeis/ae_model/decoder_model_'+str(run)+'.hdf5')
+    print("Saving Successful!")
 
     ## total history
     # create an empty dict to save all three history dicts into
@@ -227,7 +286,7 @@ subjects  = [100610, 102311, 102816, 104416, 105923,
              167440, 169040, 169343, 169444, 169747]
 
 # ------ Cross-Validation ------ #
-for n in range(5): # 5-fold cross validation
+for c in range(5): # 5-fold cross validation
     '''
         Get the test and train subjects id
         There are 5 rounds, in each round:
@@ -236,7 +295,7 @@ for n in range(5): # 5-fold cross validation
         Each subject will be used as test data once
         Each subject will be used as train data in four rounds
     '''
-    test_subjects  = subjects[n*10: n*10 + 10]
+    test_subjects  = subjects[c*10: c*10 + 10]
     train_subjects = []
     for s in subjects:
         if s not in test_subjects:
@@ -260,9 +319,9 @@ for n in range(5): # 5-fold cross validation
         Randomized order
         Each matrix train for 20 epochs in each round
     '''
-    epochs = 20
-    # tic = time.time()
-    autoencoder, encoder, decoder, total_history  = train(train_ls, epochs, 'basic_ae')
+    epochs = 2
+    # # tic = time.time()
+    autoencoder, encoder, decoder, total_history  = train(train_ls, epochs, 'basic_ae', c+1)
     # toc = time.time()
     # print("The time used for training: %.2f" % (toc - tic))
 
@@ -271,16 +330,11 @@ for n in range(5): # 5-fold cross validation
     '''
     test_latent_ls = []
     test_recon_ls  = []
-    # train_latent_ls = []
-    # train_recon_ls = []
     for t in test_ls:
         latent, recon = test(encoder, decoder, t)
         test_latent_ls.append(latent)
         test_recon_ls.append(recon)
-    # for t in train_ls:
-    #     latent, recon = test(encoder, decoder, t)
-    #     train_latent_ls.append(latent)
-    #     train_recon_ls.append(recon)
+
 
     '''
         Separate the results for different subjects
@@ -297,14 +351,6 @@ for n in range(5): # 5-fold cross validation
         test_recon_sub.append(test_recon_ls[n*14: n*14 + 14])
         test_latent_sub.append(test_latent_ls[n*14: n*14 + 14])
         test_sub.append(test_ls[n*14: n*14 + 14])
-
-    # train_recon_sub  = []
-    # train_latent_sub = []
-    # train_sub  = []
-    # for n in range(len(test_subjects)):
-    #     train_recon_sub.append(train_recon_ls[n*14: n*14 + 14])
-    #     train_latent_sub.append(train_latent_ls[n*14: n*14 + 14])
-    #     train_sub.append(train_ls[n*14: n*14 + 14])
 
     '''
         Save reconstruction results
@@ -448,4 +494,6 @@ for n in range(5): # 5-fold cross validation
     plt.plot(total_history["mean_squared_error"])
     plt.xlabel("# of iterations")
     plt.ylabel("MSE")
-    # plt.show()
+    plt.title('Train_MSE_'+str(c+1))
+    plt.savefig('/data_qnap/yifeis/ae_model/train_MSE_'+str(c+1)+'.png')
+    plt.clf()

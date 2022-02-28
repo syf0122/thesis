@@ -107,7 +107,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = hcp.parcellate(sub_data[i], hcp.mmp)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+surface_files[sub][i]+'_surf_tf_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+surface_files[sub][i]+'_surf_tf_p.npy', p)
     surf_p_data[sub] = sub_p_ls
 
 # # check the shape of the data
@@ -142,7 +142,7 @@ for sub in subjects[60:100]:
     for i in range(len(sub_data)):
         p = hcp.parcellate(sub_data[i], hcp.mmp)
         sub_p_ls.append(p)
-        # np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+surface_files[sub][i]+'_surf_norm_p.npy', p)
+        np.save('/data_qnap/yifeis/NAS/data/AD_p/'+str(sub)+'_'+surface_files[sub][i]+'_surf_norm_p.npy', p)
     surf_p_data[sub] = sub_p_ls
 # # check the shape of the data
 # for n in surf_p_data:

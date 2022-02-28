@@ -22,6 +22,7 @@ def calculate_corr(df, ldf, subject, session):
     """
     print(df.shape[1] == 91282)
     print(ldf.shape[1] == 40)
+    print(df.shape[0] == ldf.shape[0])
     cor_mtx = []
     for n in range(40):
         lat = []
@@ -29,7 +30,7 @@ def calculate_corr(df, ldf, subject, session):
             lat.append(ldf[str(n)].corr(df[m]))
         cor_mtx.append(lat)
     cor_df = pd.DataFrame(cor_mtx)
-    cor_df.to_csv("/data_qnap/yifeis/ae_corr/rest/" + subject + "_" + session + "_corr.csv")
+    cor_df.to_csv("/data_qnap/yifeis/ae_corr/task/" + subject + "_" + session + "_corr.csv")
     print(session + " done!")
     return cor_df
 
@@ -74,13 +75,8 @@ sub_22 = subjects[42:44]
 sub_23 = subjects[44:46]
 sub_24 = subjects[46:48]
 sub_25 = subjects[48:50]
-# ls = [sub_1, sub_2, sub_3, sub_4, sub_5,
-#       sub_6, sub_7, sub_8, sub_9, sub_10,
-#       sub_11, sub_12, sub_13, sub_14, sub_15,
-#       sub_16, sub_17, sub_18, sub_19, sub_20,
-#       sub_21, sub_22, sub_23, sub_24, sub_25]
 
-ses = 'rest4'
+ses = 'retexp'
 print("Calculate and save the matrix plot of " + ses + " sessions data.")
 
 # load the preprocessed data
@@ -98,6 +94,7 @@ for sub in subjects:
             tf_data_dir.append(sub_dir+f)
             data = nib.load(sub_dir+f)
             data = data.get_fdata(dtype=np.float32)
+            data = hcp.normalize(data)
             df = pd.DataFrame(data)
             print(df.shape) # (# of timepoints, 91282)
             tf_data.append(df)
