@@ -63,12 +63,12 @@ import numpy as np
 # print(np.min(f_data_norm))
 # quit()
 
-dir = '/data_qnap/yifeis/HCP_7T/'
+dir = '/data_qnap/yifeis/NAS/HCP_7T/'
 subjects = os.listdir(dir)
 subjects.sort()
 print(f'There are {len(subjects)}.')
 type = sys.argv[1]
-
+print(dir)
 vtk_dir = {}
 for sub in subjects:
 	sub_dir = dir + sub

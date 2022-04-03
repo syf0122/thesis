@@ -37,9 +37,11 @@ class BrainSphere(torch.utils.data.Dataset):
 
 # get the data for training
 num_of_sub = 20
-num_of_epo = 3
-print(f'Training with {num_of_sub} subjects resting state data and {num_of_epo} epochs.')
-train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_train_data.npy'
+num_of_epo = 5
+hemi = 'right'
+
+print(f'Training with {num_of_sub} subjects resting state data and {num_of_epo} epochs for {hemi} hemisphere.')
+train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy'
 train_dataset = BrainSphere(train_data_dir) # number of subjects * 4 * 900
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True, pin_memory=True) # each sample (163438, 1)
 print(f'Training dataset shape: {train_dataset.data.shape}')
@@ -84,12 +86,12 @@ for epoch in range(num_of_epo):
     loss_hist.append(epo_loss)
 
 # save model
-torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_final.pkl'))
+torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 # plot the loss and save the plot
 print(len(loss_hist))
 plt.plot(loss_hist)
 plt.title("The Loss of the Test Model")
 plt.ylabel('MSE')
 plt.xlabel('Epoch')
-plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_loss.png')
+plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 plt.clf()

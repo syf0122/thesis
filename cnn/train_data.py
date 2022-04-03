@@ -13,10 +13,10 @@ def helper_load(file_loc):
     return f_data
 
 # hemisphere
-hemi = 'left'
+hemi = 'right'
 
 # sub
-dir = '/data_qnap/yifeis/HCP_7T/'
+dir = '/data_qnap/yifeis/NAS/HCP_7T/'
 subjects = os.listdir(dir)
 subjects.sort()
 print(f'There are {len(subjects)} HCP_7T preprocessed subjects.')
@@ -40,8 +40,8 @@ print(f'There are currently {len(rest_sub)} subjects with rest session converted
 
 '''
     prepare the train data
-    10 subjects
-    left hemisphere
+    20 subjects
+    RIGHT hemisphere
     4 rs-fMRI sessions
 '''
 # get the first 10 subjects
@@ -65,7 +65,7 @@ for d in train_data[1:]:
     progress_bar.update(1)
 progress_bar.close()
 print(all_data.shape)
-np.save('/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_train_data.npy', all_data)
+np.save('/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy', all_data)
 
 
 # for fold in range(5):
