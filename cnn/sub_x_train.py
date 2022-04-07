@@ -18,6 +18,12 @@ cuda = torch.device('cuda:0')
 in_channels = 1
 out_channels = 1
 learning_rate = 0.001
+
+# get the data for training
+num_of_sub = 20
+num_of_epo = 5
+hemi = 'right'
+gifti = True
 ################################################################
 
 class BrainSphere(torch.utils.data.Dataset):
@@ -35,13 +41,17 @@ class BrainSphere(torch.utils.data.Dataset):
 	def __len__(self):
 		return self.data.shape[1]
 
-# get the data for training
-num_of_sub = 20
-num_of_epo = 5
-hemi = 'right'
-
+if gifti:
+	print('Using Gifti Data')
 print(f'Training with {num_of_sub} subjects resting state data and {num_of_epo} epochs for {hemi} hemisphere.')
-train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy'
+if gifti:
+	# gifti_data
+	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_data.npy'
+else:
+	# vtk data
+	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy'
+
+print(train_data_dir)
 train_dataset = BrainSphere(train_data_dir) # number of subjects * 4 * 900
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True, pin_memory=True) # each sample (163438, 1)
 print(f'Training dataset shape: {train_dataset.data.shape}')
@@ -58,10 +68,6 @@ def train_step(data, target):
 	model.train()
 	data, target = data.cuda(cuda), target.cuda(cuda)
 	prediction = model(data)
-	# print('input shape')
-	# print(data.shape)
-	# print('pred shape')
-	# print(prediction.shape)
 	loss = criterion(prediction, target)
 	optimizer.zero_grad()
 	loss.backward()
@@ -77,8 +83,6 @@ for epoch in range(num_of_epo):
         data = data.unsqueeze(1)
         target = target.squeeze()
         target = target.unsqueeze(1)
-        # print('target shape')
-        # print(target.shape)
         loss = train_step(data, target)
         print("[{}:{}/{}]  LOSS={:.4}".format(epoch+1, batch_idx, len(train_dataloader), loss))
         epo_loss.append(loss)
@@ -86,12 +90,18 @@ for epoch in range(num_of_epo):
     loss_hist.append(epo_loss)
 
 # save model
-torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+if gifti:
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+else:
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 # plot the loss and save the plot
 print(len(loss_hist))
 plt.plot(loss_hist)
 plt.title("The Loss of the Test Model")
 plt.ylabel('MSE')
 plt.xlabel('Epoch')
-plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+if gifti:
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+else:
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 plt.clf()

@@ -84,27 +84,6 @@ for n in vtk_dir:
 	print(len(vtk_dir[n]))
 
 
-# rest1_sub = []
-# for sub in vtk_dir:
-# 	if len(vtk_dir[sub]) == 2:
-# 		rest1_sub.append(sub)
-# print(f'There are currently {len(rest1_sub)} subjects with rest1 session converted to vtk.')
-#
-# # read vtk
-# l_data = read_vtk(vtk_dir[rest1_sub[0]][0])
-# print(l_data.keys())
-# print(l_data['vertices'].shape) # (163842, 3)
-# print(l_data['faces'].shape)    # (327680, 4)
-# print(l_data['cdata'].shape)    # (163842, timepoints)
-#
-# r_data = read_vtk(vtk_dir[rest1_sub[0]][1])
-# print(r_data.keys())
-# print(r_data['vertices'].shape) # (163842, 3)
-# print(r_data['faces'].shape)    # (327680, 4)
-# print(r_data['cdata'].shape)    # (163842, timepoints)
-
-
-
 # e1_data = read_vtk("/data_qnap/yifeis/spherical_cnn/example_data/test1.rh.160k.vtk")
 # e2_data = read_vtk("/data_qnap/yifeis/spherical_cnn/example_data/test2.lh.160k.vtk")
 # e3_data = read_vtk("/data_qnap/yifeis/spherical_cnn/example_data/test3.lh.160k.vtk")

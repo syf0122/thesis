@@ -7,6 +7,7 @@ import glob
 import os
 from tqdm import tqdm
 import pandas as pd
+import nibabel as nib
 
 from model import Unet_160k
 from sphericalunet.utils.vtk import read_vtk, write_vtk, resample_label
@@ -31,8 +32,24 @@ def inference(ts, model):
     pred = pred.squeeze()
     return pred
 
+#
+# f_img = nib.load('/data_qnap/yifeis/NAS/HCP_7T/100610/movie1_left.func.gii')
+# f_data = [x.data for x in f_img.darrays]
+# f_data = np.reshape(f_data,(len(f_data[0]),len(f_data)))
+# v_data = read_vtk('/data_qnap/yifeis/NAS/HCP_7T/100610/movie1_left.vtk')['cdata']
+#
+# print(f_data.shape)
+# print(v_data.shape)
+# print(f_data.max())
+# print(v_data.max())
+# print(f_data.min())
+# print(v_data.min())
+# print(f_data.mean())
+# print(v_data.mean())
+# quit()
+
 sub_train = 20
-hemi = 'right'
+hemi = 'left'
 
 model = Unet_160k(1, 1)
 device = torch.device('cuda:0')
@@ -45,15 +62,16 @@ model.eval()
 # get all subjects
 subjects = os.listdir('/data_qnap/yifeis/NAS/HCP_7T')
 subjects.sort()
-sessions = ['movie1', 'movie2', 'movie3', 'movie4']
+sessions = ['movie1']
 
-for sub in subjects[:30]:
+for sub in subjects[:1]:
     for ses in sessions:
         # load the test data
-        test_data_dir = '/data_qnap/yifeis/NAS/HCP_7T/'+sub+'/'+ses+'_'+hemi+'.vtk'
+        test_data_dir = '/data_qnap/yifeis/NAS/HCP_7T/'+sub+'/'+ses+'_'+hemi+'.func.gii'
         print(test_data_dir)
-        # read vtk
-        f_data = read_vtk(test_data_dir)['cdata']
+        # read gifti
+        f_data = nib.load(test_data_dir)
+        f_data = np.array(f_data.agg_data()).T
         # normalization
         f_data = (f_data - np.mean(f_data,axis=0))/np.std(f_data,axis=0)
         data = torch.from_numpy(f_data).unsqueeze(1) # 163842, 1, # of timepoints
@@ -73,10 +91,5 @@ for sub in subjects[:30]:
         mse_loss = mse(f_data, pred_t_series)
         print(se_loss.shape)
         print(mse_loss.shape)
-        np.save('/data_qnap/yifeis/spherical_cnn/results/MSE/'+str(sub)+'_'+ses+'_'+hemi+'.npy', mse_loss)
-        np.save('/data_qnap/yifeis/spherical_cnn/results/SE/'+str(sub)+'_'+ses+'_'+hemi+'.npy', se_loss)
-
-        # mse_df = pd.DataFrame(mse_loss)
-        # mse_df.to_csv("/data_qnap/yifeis/spherical_cnn/results/MSE/"+str(sub)+'_'+ses+'_'+hemi+".csv")
-        # se_df = pd.DataFrame(se_loss)
-        # se_df.to_csv("/data_qnap/yifeis/spherical_cnn/results/SE/"+str(sub)+'_'+ses+'_'+hemi+".csv")
+        np.save('/data_qnap/yifeis/spherical_cnn/results/MSE/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', mse_loss)
+        np.save('/data_qnap/yifeis/spherical_cnn/results/SE/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', se_loss)
