@@ -4,43 +4,28 @@ import os
 from tqdm import tqdm
 import nibabel as nib
 from sphericalunet.utils.vtk import read_vtk, write_vtk, resample_label
+import hcp_utils as hcp
 
 def helper_load(file_loc):
     # read vtk
     f_data = read_vtk(file_loc)['cdata']
-    # normalization
-    f_data = (f_data - np.mean(f_data,axis=0))/np.std(f_data,axis=0)
-    # print(f_data.shape) # (163842, 900)
+    # # normalization
+    f_data = f_data.T
+    f_data = hcp.normalization(f_data)
+    f_data = f_data.T
     return f_data
 
 def helper_gifti_load(file_loc):
     # read gifti
     f_data = nib.load(file_loc)
-    f_data = np.array(f_data.agg_data()).T
-    # normalization
-    f_data = (f_data - np.mean(f_data,axis=0))/np.std(f_data,axis=0)
-    # print(f_data.shape) # (163842, 900)
+    f_data = np.array(f_data.agg_data())
+    f_data = hcp.normalize(f_data)
+    f_data = f_data.T
+    f_data = np.nan_to_num(f_data) # convert to zero for those vertices with all 0 values 
     return f_data
 
-
-# # test
-# v_data = helper_load("/data_qnap/yifeis/NAS/HCP_7T/100610/rest1_left.vtk")
-# print()
-# g_data = helper_gifti_load("/data_qnap/yifeis/NAS/HCP_7T/100610/rest1_left.func.gii")
-# print()
-# print(v_data[0].shape)
-# print(v_data[0].mean())
-# print(v_data[:, 0].shape)
-# print(v_data[:, 0].mean())
-# print()
-# print(g_data[0].shape)
-# print(g_data[0].mean())
-# print(g_data[:, 0].shape)
-# print(g_data[:, 0].mean())
-# quit()
-
 # hemisphere
-hemi = 'right'
+hemi = 'left'
 
 # sub
 dir = '/data_qnap/yifeis/NAS/HCP_7T/'
@@ -97,13 +82,14 @@ print(f'There are {len(subjects)} HCP_7T preprocessed subjects.')
 # gifti
 g_dir = {}
 for sub in subjects:
-	sub_dir = dir + sub
-	all_sub_files = os.listdir(sub_dir)
-	sub_vtk_dir = []
-	for file in all_sub_files:
-	    if file.endswith(".func.gii") and 'rest' in file and hemi in file:
-	        sub_vtk_dir.append(os.path.join(sub_dir, file))
-	g_dir[sub] = sub_vtk_dir
+    sub_dir = dir + sub
+    all_sub_files = os.listdir(sub_dir)
+    all_sub_files.sort()
+    sub_vtk_dir = []
+    for file in all_sub_files:
+        if file.endswith(".func.gii") and 'rest' in file and hemi in file:
+            sub_vtk_dir.append(os.path.join(sub_dir, file))
+    g_dir[sub] = sub_vtk_dir
 
 rest_sub = []
 for sub in g_dir:

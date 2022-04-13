@@ -21,8 +21,8 @@ learning_rate = 0.001
 
 # get the data for training
 num_of_sub = 20
-num_of_epo = 5
-hemi = 'right'
+num_of_epo = 20
+hemi = 'left'
 gifti = True
 ################################################################
 
@@ -76,7 +76,7 @@ def train_step(data, target):
 
 loss_hist = []
 for epoch in range(num_of_epo):
-    epo_loss = []
+    #epo_loss = []
     print("learning rate = {}".format(optimizer.param_groups[0]['lr']))
     for batch_idx, (data, target) in enumerate(train_dataloader):
         data = data.squeeze()
@@ -85,23 +85,24 @@ for epoch in range(num_of_epo):
         target = target.unsqueeze(1)
         loss = train_step(data, target)
         print("[{}:{}/{}]  LOSS={:.4}".format(epoch+1, batch_idx, len(train_dataloader), loss))
-        epo_loss.append(loss)
-    epo_loss = np.array(epo_loss).mean()
-    loss_hist.append(epo_loss)
+        loss_hist.append(loss)
+    #epo_loss = np.array(epo_loss).mean()
+    #loss_hist.append(epo_loss)
 
 # save model
 if gifti:
-	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 else:
-	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 # plot the loss and save the plot
 print(len(loss_hist))
+np.save('/data_qnap/yifeis/spherical_cnn/models/epo_20/loss_'+str(num_of_sub)+'_'+hemi+'.npy', loss_hist)
 plt.plot(loss_hist)
 plt.title("The Loss of the Test Model")
 plt.ylabel('MSE')
-plt.xlabel('Epoch')
+plt.xlabel('Epoch * Samples')
 if gifti:
-	plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 else:
-	plt.savefig('/data_qnap/yifeis/spherical_cnn/test/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 plt.clf()

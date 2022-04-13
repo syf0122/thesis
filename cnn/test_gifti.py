@@ -8,6 +8,7 @@ import os
 from tqdm import tqdm
 import pandas as pd
 import nibabel as nib
+import hcp_utils as hcp
 
 from model import Unet_160k
 from sphericalunet.utils.vtk import read_vtk, write_vtk, resample_label
@@ -53,27 +54,34 @@ hemi = 'left'
 
 model = Unet_160k(1, 1)
 device = torch.device('cuda:0')
-model_path = "/data_qnap/yifeis/spherical_cnn/test/epo_5/Unet_160k_test_"+str(sub_train)+'_'+hemi+"_final.pkl"
+model_path = "/data_qnap/yifeis/spherical_cnn/models/epo_8/Unet_160k_test_gifti_"+str(sub_train)+'_'+hemi+"_final.pkl"
 print(f"Use model at :{model_path} ")
 model.to(device)
 model.load_state_dict(torch.load(model_path))
 model.eval()
 
 # get all subjects
-subjects = os.listdir('/data_qnap/yifeis/NAS/HCP_7T')
+subjects = os.listdir('/data_qnap/yifeis/NAS/HCP_7T') # 1 - 50
+# subjects = os.listdir('/data_qnap/yifeis/HCP_7T') # 51-100
 subjects.sort()
-sessions = ['movie1']
-
-for sub in subjects[:1]:
+subjects = subjects[20:]
+sessions = ['movie1', 'movie2', 'movie3', 'movie4',
+            'rest1', 'rest2', 'rest3', 'rest4',
+            'retbar1', 'retbar2', 'retccw', 'retcon', 'retcw', 'retexp']
+print(subjects)
+for sub in subjects:
     for ses in sessions:
         # load the test data
         test_data_dir = '/data_qnap/yifeis/NAS/HCP_7T/'+sub+'/'+ses+'_'+hemi+'.func.gii'
+        # test_data_dir = '/data_qnap/yifeis/HCP_7T/'+sub+'/'+ses+'_'+hemi+'.func.gii'
         print(test_data_dir)
         # read gifti
         f_data = nib.load(test_data_dir)
-        f_data = np.array(f_data.agg_data()).T
-        # normalization
-        f_data = (f_data - np.mean(f_data,axis=0))/np.std(f_data,axis=0)
+        f_data = np.array(f_data.agg_data()) # tp, 164k
+        # temporal normalization
+        f_data = hcp.normalize(f_data)
+        f_data = f_data.T # 164k, tp
+        f_data = np.nan_to_num(f_data) # nan to 0
         data = torch.from_numpy(f_data).unsqueeze(1) # 163842, 1, # of timepoints
         pred_t_series = np.zeros(f_data.shape) # 163842, # of timepoints
 
