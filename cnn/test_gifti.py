@@ -50,11 +50,11 @@ def inference(ts, model):
 # quit()
 
 sub_train = 20
-hemi = 'left'
+hemi = 'right'
 
 model = Unet_160k(1, 1)
 device = torch.device('cuda:0')
-model_path = "/data_qnap/yifeis/spherical_cnn/models/epo_8/Unet_160k_test_gifti_"+str(sub_train)+'_'+hemi+"_final.pkl"
+model_path = "/data_qnap/yifeis/spherical_cnn/models/epo_20_20/Unet_160k_test_gifti_"+str(sub_train)+'_'+hemi+"_final.pkl"
 print(f"Use model at :{model_path} ")
 model.to(device)
 model.load_state_dict(torch.load(model_path))

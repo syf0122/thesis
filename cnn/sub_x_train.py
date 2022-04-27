@@ -22,7 +22,7 @@ learning_rate = 0.001
 # get the data for training
 num_of_sub = 20
 num_of_epo = 20
-hemi = 'left'
+hemi = 'right'
 gifti = True
 ################################################################
 
@@ -44,15 +44,18 @@ class BrainSphere(torch.utils.data.Dataset):
 if gifti:
 	print('Using Gifti Data')
 print(f'Training with {num_of_sub} subjects resting state data and {num_of_epo} epochs for {hemi} hemisphere.')
+'''
 if gifti:
 	# gifti_data
 	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_data.npy'
 else:
 	# vtk data
 	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy'
+'''
+train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/left_80_train_gifti_data.npy'
 
 print(train_data_dir)
-train_dataset = BrainSphere(train_data_dir) # number of subjects * 4 * 900
+train_dataset = BrainSphere(train_data_dir) # number of subjects * 2 * 900
 train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=1, shuffle=True, pin_memory=True) # each sample (163438, 1)
 print(f'Training dataset shape: {train_dataset.data.shape}')
 
