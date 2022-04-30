@@ -22,7 +22,7 @@ learning_rate = 0.001
 # get the data for training
 num_of_sub = 20
 num_of_epo = 20
-hemi = 'right'
+hemi = 'left'
 gifti = True
 ################################################################
 
@@ -44,15 +44,15 @@ class BrainSphere(torch.utils.data.Dataset):
 if gifti:
 	print('Using Gifti Data')
 print(f'Training with {num_of_sub} subjects resting state data and {num_of_epo} epochs for {hemi} hemisphere.')
-'''
+
 if gifti:
 	# gifti_data
-	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_data.npy'
+	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_01_data.npy'
 else:
 	# vtk data
 	train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_data.npy'
-'''
-train_data_dir = '/data_qnap/yifeis/spherical_cnn/test/left_80_train_gifti_data.npy'
+
+# train_data_dir = '/home/yifeis/DGX/spherical_cnn/test/left_80_train_gifti_data.npy'
 
 print(train_data_dir)
 train_dataset = BrainSphere(train_data_dir) # number of subjects * 2 * 900
@@ -94,9 +94,9 @@ for epoch in range(num_of_epo):
 
 # save model
 if gifti:
-	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20_01/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 else:
-	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
+	torch.save(model.state_dict(), os.path.join('/data_qnap/yifeis/spherical_cnn/models/epo_20_01/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_final.pkl'))
 # plot the loss and save the plot
 print(len(loss_hist))
 np.save('/data_qnap/yifeis/spherical_cnn/models/epo_20/loss_'+str(num_of_sub)+'_'+hemi+'.npy', loss_hist)
@@ -105,7 +105,7 @@ plt.title("The Loss of the Test Model")
 plt.ylabel('MSE')
 plt.xlabel('Epoch * Samples')
 if gifti:
-	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20_01/Unet_160k_test_gifti_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 else:
-	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
+	plt.savefig('/data_qnap/yifeis/spherical_cnn/models/epo_20_01/Unet_160k_test_'+str(num_of_sub)+'_'+hemi+'_loss.png')
 plt.clf()

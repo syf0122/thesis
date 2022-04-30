@@ -15,7 +15,7 @@ def helper_gifti_load(file_loc):
     return f_data
 
 # hemisphere
-hemi = 'left'
+hemi = 'right'
 
 # sub
 dir = '/home/yifeis/DGX/NAS/HCP_7T/'
@@ -36,7 +36,7 @@ for sub in subjects:
     all_sub_files.sort()
     sub_gif_dir = []
     for file in all_sub_files:
-        if file.endswith(".func.gii") and 'rest2' in file and hemi in file:
+        if file.endswith(".func.gii") and 'rest1' in file and hemi in file:
             sub_gif_dir.append(os.path.join(sub_dir, file))
     g_dir[sub] = sub_gif_dir
 
@@ -46,7 +46,7 @@ for sub in subjects_2:
     all_sub_files.sort()
     sub_gif_dir = []
     for file in all_sub_files:
-        if file.endswith(".func.gii") and 'rest2' in file and hemi in file:
+        if file.endswith(".func.gii") and 'rest1' in file and hemi in file:
             sub_gif_dir.append(os.path.join(sub_dir, file))
     g_dir[sub] = sub_gif_dir
 
@@ -80,4 +80,4 @@ for d in train_data[1:]:
 progress_bar.close()
 
 print(all_data.shape)
-np.save('/home/yifeis/DGX/spherical_cnn/test/left_80_train_gifti_data_r2.npy', all_data)
+np.save('/home/yifeis/DGX/spherical_cnn/test/right_80_train_gifti_data_r1.npy', all_data)

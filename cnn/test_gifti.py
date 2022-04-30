@@ -49,12 +49,12 @@ def inference(ts, model):
 # print(v_data.mean())
 # quit()
 
-sub_train = 20
-hemi = 'right'
+sub_train = 80
+hemi = 'left'
 
 model = Unet_160k(1, 1)
 device = torch.device('cuda:0')
-model_path = "/data_qnap/yifeis/spherical_cnn/models/epo_20_20/Unet_160k_test_gifti_"+str(sub_train)+'_'+hemi+"_final.pkl"
+model_path = "/data_qnap/yifeis/spherical_cnn/models/epo_20/Unet_160k_test_gifti_"+str(sub_train)+'_'+hemi+"_final.pkl"
 print(f"Use model at :{model_path} ")
 model.to(device)
 model.load_state_dict(torch.load(model_path))
@@ -82,6 +82,7 @@ for sub in subjects:
         f_data = hcp.normalize(f_data)
         f_data = f_data.T # 164k, tp
         f_data = np.nan_to_num(f_data) # nan to 0
+        f_data = (f_data - np. min(f_data)) / (np. max(f_data) - np. min(f_data)) # normalize to 0-1
         data = torch.from_numpy(f_data).unsqueeze(1) # 163842, 1, # of timepoints
         pred_t_series = np.zeros(f_data.shape) # 163842, # of timepoints
 
@@ -99,5 +100,5 @@ for sub in subjects:
         mse_loss = mse(f_data, pred_t_series)
         print(se_loss.shape)
         print(mse_loss.shape)
-        np.save('/data_qnap/yifeis/spherical_cnn/results/MSE/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', mse_loss)
-        np.save('/data_qnap/yifeis/spherical_cnn/results/SE/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', se_loss)
+        np.save('/data_qnap/yifeis/spherical_cnn/results/MSE_80/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', mse_loss)
+        np.save('/data_qnap/yifeis/spherical_cnn/results/SE_80/'+str(sub)+'_'+ses+'_'+hemi+'_using_gifti.npy', se_loss)

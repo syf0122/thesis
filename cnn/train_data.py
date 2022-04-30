@@ -21,14 +21,15 @@ def helper_gifti_load(file_loc):
     f_data = np.array(f_data.agg_data())
     f_data = hcp.normalize(f_data)
     f_data = f_data.T
-    f_data = np.nan_to_num(f_data) # convert to zero for those vertices with all 0 values 
+    f_data = np.nan_to_num(f_data) # convert to zero for those vertices with all 0 values
+    f_data = (f_data - np. min(f_data)) / (np. max(f_data) - np. min(f_data)) # normalize to 0-1
     return f_data
 
 # hemisphere
-hemi = 'left'
+hemi = 'right'
 
 # sub
-dir = '/data_qnap/yifeis/NAS/HCP_7T/'
+dir = '/home/yifeis/DGX/NAS/HCP_7T/'
 subjects = os.listdir(dir)
 subjects.sort()
 print(f'There are {len(subjects)} HCP_7T preprocessed subjects.')
@@ -125,63 +126,4 @@ for d in train_data[1:]:
     progress_bar.update(1)
 progress_bar.close()
 print(all_data.shape)
-np.save('/data_qnap/yifeis/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_data.npy', all_data)
-
-# for fold in range(5):
-#     # get the training subjects for each fold
-#     test_subs  = subjects[fold*10: fold*10 + 10]
-#       print(test_subs)
-#     train_subs = []
-#     for s in subjects:
-#         if s not in test_subs:
-#             train_subs.append(s)
-#
-#     # load all rs data for left and right hemisphere
-#     train_data_l = []
-#     train_data_r = []
-#     progress_bar = tqdm(range(len(train_subs) * 8))
-#     for s in train_subs:
-#         # left
-#         train_data_l.append(helper_load(dir+s+'/rest1_left.vtk'))
-#         progress_bar.update(1)
-#         train_data_l.append(helper_load(dir+s+'/rest2_left.vtk'))
-#         progress_bar.update(1)
-#         train_data_l.append(helper_load(dir+s+'/rest3_left.vtk'))
-#         progress_bar.update(1)
-#         train_data_l.append(helper_load(dir+s+'/rest4_left.vtk'))
-#         progress_bar.update(1)
-#
-#         # right
-#         train_data_r.append(helper_load(dir+s+'/rest1_right.vtk'))
-#         progress_bar.update(1)
-#         train_data_r.append(helper_load(dir+s+'/rest2_right.vtk'))
-#         progress_bar.update(1)
-#         train_data_r.append(helper_load(dir+s+'/rest3_right.vtk'))
-#         progress_bar.update(1)
-#         train_data_r.append(helper_load(dir+s+'/rest4_right.vtk'))
-#         progress_bar.update(1)
-#     progress_bar.close()
-#
-#     # concatenate all data matrices
-#     # left
-#     progress_bar = tqdm(range(len(train_data_l)))
-#     all_data_l = train_data_l[0]
-#     progress_bar.update(1)
-#     for d in train_data_l[1:]:
-#         all_data_l = np.concatenate((all_data_l, d), axis=1)
-#         progress_bar.update(1)
-#     progress_bar.close()
-#
-#     # right
-#     progress_bar = tqdm(range(len(train_data_r)))
-#     all_data_r = train_data_r[0]
-#     progress_bar.update(1)
-#     for d in train_data_r[1:]:
-#         all_data_r = np.concatenate((all_data_r, d), axis=1)
-#         progress_bar.update(1)
-#     progress_bar.close()
-#
-#
-#     # save as .npy file
-#     np.save('/data_qnap/yifeis/spherical_cnn/train_data/train_'+str(fold+1)+'_l.npy', all_data_l)
-#     np.save('/data_qnap/yifeis/spherical_cnn/train_data/train_'+str(fold+1)+'_r.npy', all_data_r)
+np.save('/home/yifeis/DGX/spherical_cnn/test/first_'+str(num_of_sub)+'_'+hemi+'_train_gifti_01_data.npy', all_data)
